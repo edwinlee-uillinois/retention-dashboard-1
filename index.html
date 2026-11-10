@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>First-Time Freshmen Retention Rate | University of Illinois System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Oswald:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light;
+  --uofi-blue: #13294B;
+  --uofi-blue-2728: #0455A4;
+  --uofi-blue-2738: #1F4096;
+  --neutral-light: #E8E9EA;
+  --neutral-mid: #A5A8AA;
+  --neutral-dark: #5E6669;
+  --accent-teal: #0D605E;
+  --uiuc-orange: #FF5F0F;
+  --uic-red: #D50032;
+  --uis-blue: #003366;
+  --font-display: "Oswald", "Arial Narrow", Arial, sans-serif;
+  --font-sans: "Lato", "Helvetica Neue", Arial, sans-serif;
+  --bg-knockout: var(--uofi-blue-2738);
+  --text: var(--uofi-blue);
+  --text-subhead: var(--uofi-blue-2728);
+  --text-muted: var(--neutral-dark);
+  --focus-ring: var(--uofi-blue-2728);
+  --border: var(--neutral-light);
+  --border-strong: var(--neutral-mid);
+  --delta-favorable: var(--accent-teal);
+  --delta-unfavorable: var(--neutral-dark);
+  --kpi-up: #2E7D32;      /* green, 5.1:1 on white */
+  --kpi-down: #C62828;    /* red, 5.6:1 on white */
+  --hero: var(--uofi-blue-2728);
+  --row-selected: #D9E6F1;
+}
+.dash[data-view="uiuc"] { --hero: var(--uiuc-orange); --row-selected: #FFE7DB; }
+.dash[data-view="uic"]  { --hero: var(--uic-red); --row-selected: #F9D9E0; }
+.dash[data-view="uis"]  { --hero: var(--uis-blue); --row-selected: #D9E0E8; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #FFFFFF; }
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+.dash { background: #FFFFFF; }
+.wrap { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+/* Skip link: hidden until it receives keyboard focus */
+.skip-link {
+  position: absolute; left: 8px; top: -200px; z-index: 30;
+  background: var(--uofi-blue-2728); color: #FFFFFF; font-weight: 700; font-size: 14px; line-height: 1.3;
+  padding: 10px 16px; border-radius: 4px; text-decoration: underline; text-underline-offset: 3px;
+}
+.skip-link:focus { top: 8px; outline: 2px solid var(--uofi-blue); outline-offset: 2px; }
+main:focus { outline: none; }
+.reset-wrap { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.reset-note { font-size: 14px; font-weight: 700; line-height: 1.3; color: var(--text); }
+.reset-note[hidden] { display: none; }
+.reset-note .check { color: var(--accent-teal); margin-right: 4px; }
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Masthead */
+.masthead { background: #FFFFFF; color: var(--text); padding: 8px 0 0; }
+.masthead h1 {
+  font-family: var(--font-display); font-weight: 500; font-size: 32px; line-height: 1.1;
+  margin: 0;
+}
+.masthead .scope { font-size: 15px; line-height: 1.4; margin: 6px 0 0; color: var(--text); }
+
+/* Filter bar */
+.filter-bar { background: #FFFFFF; }
+.filter-inner {
+  display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 24px;
+  padding-top: 16px; padding-bottom: 16px;
+}
+.ctl-label, .view-filter legend {
+  display: block; font-weight: 700; font-size: 14px; line-height: 1.3;
+  color: var(--text-muted); margin: 0 0 6px; padding: 0;
+}
+.view-filter { border: 0; margin: 0; padding: 0; min-width: 0; }
+.seg-group { display: inline-flex; }
+.seg {
+  position: relative; display: inline-flex; align-items: center; gap: 8px;
+  min-height: 38px; padding: 8px 14px;
+  background: #FFFFFF; color: var(--text);
+  border: 1px solid var(--neutral-dark);
+  font-size: 14px; font-weight: 700; line-height: 1.3; cursor: pointer;
+  white-space: nowrap;
+}
+.seg + .seg { margin-left: -1px; }
+.seg:first-child { border-radius: 4px 0 0 4px; }
+.seg:last-child { border-radius: 0 4px 4px 0; }
+.seg .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--dot); flex: none; }
+.seg.is-checked { background: var(--dot); border-color: var(--dot); color: var(--seg-on); z-index: 1; }
+.seg.is-checked .dot { display: none; }
+.seg { font-family: inherit; margin: 0; -webkit-appearance: none; appearance: none; }
+.seg:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; z-index: 2; }
+.filter-inner .view-select-wrap { display: none; }
+.filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; }
+.f { display: flex; flex-direction: column; }
+.f select {
+  font-family: var(--font-sans); font-size: 14px; line-height: 1.3; color: var(--text);
+  background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2313294B' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 12px center;
+  border: 1px solid var(--neutral-dark); border-radius: 4px;
+  min-height: 38px; padding: 8px 36px 8px 12px;
+  -webkit-appearance: none; appearance: none; cursor: pointer; max-width: 100%;
+}
+#f-race { min-width: 15em; }
+.reset {
+  font-family: var(--font-sans); font-size: 14px; font-weight: 700; color: var(--text-subhead);
+  background: none; border: 0; padding: 9px 4px; min-height: 38px; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+select:focus-visible, button:focus-visible {
+  outline: 2px solid var(--focus-ring); outline-offset: 2px;
+}
+.hero-rule { height: 4px; background: var(--hero); }
+
+/* Main */
+main.wrap { padding-top: 24px; padding-bottom: 8px; }
+.subhead { font-weight: 700; font-size: 18px; line-height: 1.3; color: var(--text-subhead); margin: 0; }
+.caption { font-size: 13px; line-height: 1.4; color: var(--text-muted); margin: 4px 0 0; }
+
+.kpis {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px; margin-top: 16px;
+}
+.kpi {
+  position: relative; background: #FFFFFF; border: 1px solid var(--border); border-radius: 4px;
+  padding: 20px; overflow: hidden;
+}
+.kpi-label { font-weight: 700; font-size: 14px; line-height: 1.3; color: var(--text-muted); margin: 0; }
+.kpi-value {
+  font-family: var(--font-display); font-weight: 500; font-size: 40px; line-height: 1;
+  color: var(--text); margin: 12px 0; font-variant-numeric: tabular-nums;
+}
+.kpi-value.is-unavailable {
+  font-family: var(--font-sans); font-weight: 700; font-size: 16px; line-height: 1.3;
+  color: var(--text-muted); margin: 16px 0;
+}
+.delta { font-size: 14px; line-height: 1.4; color: var(--text); margin: 0; font-variant-numeric: tabular-nums; }
+.delta:empty { display: none; }
+.g { font-size: 13px; margin-right: 2px; }
+.g.fav { color: var(--delta-favorable); }
+.g.unfav, .g.neutral, .g.none { color: var(--delta-unfavorable); }
+.kpi .delta.is-up { color: var(--kpi-up); }
+.kpi .delta.is-down { color: var(--kpi-down); }
+.kpi .delta.is-up .g, .kpi .delta.is-down .g { color: inherit; }
+
+.row {
+  display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 24px; margin-top: 24px; align-items: stretch;
+}
+.trend-card { margin-top: 24px; }
+.card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 4px; padding: 20px 24px; min-width: 0; }
+
+.legend {
+  display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 12px 0 8px;
+  font-size: 13px; line-height: 1.4; color: var(--text);
+}
+.legend:empty { display: none; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; flex: none; }
+.sw-line { width: 20px; height: 0; border-top: 3px solid; border-radius: 0; }
+.sw-dash { width: 22px; height: 0; border-top: 2px dashed var(--neutral-dark); border-radius: 0; }
+.note { font-size: 12px; line-height: 1.4; color: var(--text-muted); margin: 8px 0 0; }
+.note:empty { display: none; }
+
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; overflow: visible; }
+.chart svg text { font-family: var(--font-sans); font-size: 12px; fill: var(--text-muted); }
+.chart svg .t-val { font-size: 13px; font-weight: 700; fill: var(--text); font-variant-numeric: tabular-nums; }
+.chart svg .t-name { font-size: 13px; fill: var(--text); }
+.chart svg .t-name.is-selected { font-weight: 700; }
+.chart svg .t-supp { font-size: 12px; fill: var(--text-muted); }
+.chart svg .halo { paint-order: stroke; stroke: #FFFFFF; stroke-width: 4px; stroke-linejoin: round; }
+.chart-hit { cursor: pointer; fill: transparent; }
+.chart-hit:hover { fill: rgba(232, 233, 234, 0.6); }
+.chart-hit:focus { outline: none; }
+.chart-hit:focus-visible { fill: rgba(232, 233, 234, 0.6); stroke: var(--focus-ring); stroke-width: 2px; }
+
+/* Table */
+.table-wrap { overflow-x: auto; margin-top: 12px; }
+.table-wrap:focus { outline: none; }
+.table-wrap:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+table.data { width: 100%; table-layout: auto; border-collapse: collapse; font-size: 14px; line-height: 1.5; min-width: 440px; }
+table.data col { width: 25%; }
+table.data thead th {
+  background: var(--bg-knockout); color: #FFFFFF; font-weight: 700; font-size: 13px; line-height: 1.3;
+  text-align: right; padding: 10px 12px; white-space: nowrap;
+}
+table.data th:first-child, table.data td:first-child { text-align: left; }
+table.data td {
+  padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: right;
+  font-variant-numeric: tabular-nums; color: var(--text);
+}
+table.data tbody th {
+  font-weight: 400; text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border);
+  color: var(--text); font-variant-numeric: tabular-nums;
+}
+table.data tbody tr:hover td, table.data tbody tr:hover th { background: var(--neutral-light); }
+table.data tr.is-selected td, table.data tr.is-selected th { font-weight: 700; }
+table.data tbody tr.is-selected td, table.data tbody tr.is-selected th { background: var(--row-selected); }
+table.data tbody tr.is-selected td.supp { color: var(--text); }
+table.data td.supp { text-align: left; color: var(--text-muted); white-space: normal; }
+
+/* Intro */
+.scope-title { font-size: 24px; line-height: 1.25; margin: 0 0 12px; }
+.intro { margin: 0 0 8px; }
+.intro-text { font-size: 15px; line-height: 1.5; color: var(--text); margin: 0; }
+
+/* About */
+.about dl { margin: 12px 0 0; }
+.about dt { font-weight: 700; font-size: 14px; line-height: 1.4; margin-top: 12px; }
+.about dt:first-child { margin-top: 0; }
+.about dd { margin: 2px 0 0; font-size: 14px; line-height: 1.5; }
+
+/* Footer */
+.footer { font-size: 12px; line-height: 1.4; color: var(--text-muted); padding-top: 16px; padding-bottom: 24px; }
+.footer p { margin: 0 0 4px; }
+
+/* Tooltip */
+.tip {
+  position: fixed; z-index: 20; max-width: 300px;
+  background: #FFFFFF; border: 1px solid var(--border-strong); border-radius: 4px;
+  padding: 8px 10px; font-size: 13px; line-height: 1.45; color: var(--text);
+}
+.tip[hidden] { display: none; }
+.tip strong { display: block; font-weight: 700; margin-bottom: 2px; }
+.tip .tip-cohort { color: var(--text-muted); margin-bottom: 6px; }
+
+/* Responsive layouts
+   Desktop (1024px and wider): the defaults above.
+   iPad and small laptops (641–1023px): chart and About stack; KPIs stay in three columns.
+   iPhone (640px and narrower): single column, View becomes a dropdown, filters in a two-column grid. */
+@media (max-width: 1023px) {
+  main.wrap { padding-top: 20px; }
+  .row { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 16px; }
+  .trend-card { margin-top: 16px; }
+  .kpis { gap: 16px; }
+  .kpi { padding: 16px; }
+  .kpi-value { font-size: 36px; margin: 10px 0; }
+  .card { padding: 20px; }
+}
+@media (max-width: 640px) {
+  .wrap { padding: 0 16px; }
+  .masthead { padding: 4px 0 0; }
+  .masthead h1 { font-size: 28px; }
+  .scope-title { font-size: 21px; }
+  .masthead .scope { font-size: 14px; }
+  .view-filter { display: none; }
+  .filter-inner {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-auto-flow: row dense; gap: 12px;
+    padding-top: 16px; padding-bottom: 16px;
+  }
+  .filter-inner .view-select-wrap { display: flex; grid-column: 1 / -1; }
+  .filters { display: contents; }
+  .f-race { grid-column: 1 / -1; }
+  .f select, #f-race { width: 100%; min-width: 0; }
+  .reset-wrap { justify-self: start; grid-column: 1 / -1; }
+  .kpis { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .kpi { padding: 14px 16px; }
+  .kpi-value { font-size: 36px; margin: 8px 0; }
+  .card { padding: 16px; }
+  table.data { min-width: 0; font-size: 13px; }
+  table.data thead th { white-space: normal; vertical-align: bottom; font-size: 12px; padding: 8px 6px; }
+  table.data td, table.data tbody th { padding: 8px 6px; white-space: nowrap; }
+  table.data td.supp { white-space: normal; }
+  table.data th:first-child, table.data td:first-child { padding-left: 10px; }
+}
+/* Smallest phones (iPhone SE, mini) */
+@media (max-width: 400px) {
+  table.data { font-size: 12px; }
+  table.data th, table.data td { padding-left: 4px; padding-right: 4px; }
+  table.data th:first-child, table.data td:first-child { padding-left: 8px; }
+}
+/* Touch screens (iPhone, iPad): 44px tap targets */
+@media (pointer: coarse) {
+  .seg, .f select, .reset { min-height: 44px; }
+}
+@media print {
+  .filter-bar, .reset { display: none; }
+  .card, .kpi { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="dash" id="dash" data-view="system">
+  <a class="skip-link" id="skip-link" href="#main">Skip to main content</a>
+  <header class="masthead">
+    <div class="wrap">
+      <h1>First-Time Freshmen Retention Rate</h1>
+      <p class="scope" id="scope-line">University of Illinois System</p>
+    </div>
+  </header>
+
+  <section class="filter-bar" aria-label="View and filter options">
+    <div class="wrap filter-inner">
+      <div class="view-filter" id="view-filter">
+        <span class="ctl-label" id="view-label">View</span>
+        <div class="seg-group" id="seg-group" role="tablist" aria-labelledby="view-label"></div>
+      </div>
+      <div class="f view-select-wrap">
+        <label class="ctl-label" for="view-select">View</label>
+        <select id="view-select" aria-controls="view-panel"></select>
+      </div>
+      <div class="filters">
+        <div class="f">
+          <label class="ctl-label" for="f-year">Year</label>
+          <select id="f-year"></select>
+        </div>
+        <div class="f f-race">
+          <label class="ctl-label" for="f-race">Race/ethnicity</label>
+          <select id="f-race"></select>
+        </div>
+        <div class="f">
+          <label class="ctl-label" for="f-sex">Sex</label>
+          <select id="f-sex"></select>
+        </div>
+        <div class="reset-wrap">
+          <button type="button" class="reset" id="reset">Reset filters</button>
+          <span class="reset-note" id="reset-note" aria-hidden="true" hidden><span class="check">✓</span>Filters reset</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="hero-rule" aria-hidden="true"></div>
+
+  <main class="wrap" id="main" tabindex="-1">
+   <div id="view-panel" role="tabpanel" aria-labelledby="tab-system">
+    <h2 class="subhead scope-title" id="kpi-scope"></h2>
+    <section class="intro" aria-label="About this dashboard">
+      <p class="intro-text">This dashboard displays the percentage of students who have enrolled in their second term. Students are first-time, full-time, degree-seeking freshmen entering in the fall term. Retention rates for certain selections may not have any students for a given year and/or have large changes from year-to-year due to smaller number of students.</p>
+    </section>
+    <section aria-labelledby="kpi-scope">
+      <div class="kpis">
+        <article class="kpi">
+          <h3 class="kpi-label" id="k-rate-label">Retention rate</h3>
+          <p class="kpi-value" id="k-rate">&#8212;</p>
+          <p class="delta" id="k-rate-d"></p>
+        </article>
+        <article class="kpi">
+          <h3 class="kpi-label" id="k-ret-label">Students Retained</h3>
+          <p class="kpi-value" id="k-ret">&#8212;</p>
+          <p class="delta" id="k-ret-d"></p>
+        </article>
+        <article class="kpi">
+          <h3 class="kpi-label" id="k-coh-label">Students in Cohort</h3>
+          <p class="kpi-value" id="k-coh">&#8212;</p>
+          <p class="delta" id="k-coh-d"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="card trend-card" aria-labelledby="trend-head">
+      <h2 class="subhead" id="trend-head">Retention Rate by Year</h2>
+      <p class="caption">Select a year on the chart or use the filter to update the key figures.</p>
+      <div class="legend" id="trend-legend"></div>
+      <div class="chart" id="trend-chart"></div>
+      <p class="note" id="trend-note"></p>
+    </section>
+
+    <div class="row">
+      <section class="card table-card" aria-labelledby="table-head">
+        <h2 class="subhead" id="table-head">Retention Data Table</h2>
+        <p class="caption" id="table-caption"></p>
+        <div class="table-wrap" id="table-wrap">
+          <table class="data" id="year-table">
+            <caption class="visually-hidden" id="table-cap"></caption>
+            <colgroup><col><col><col><col></colgroup>
+            <thead>
+              <tr>
+                <th scope="col">Year</th>
+                <th scope="col">Students in Cohort</th>
+                <th scope="col">Students Retained</th>
+                <th scope="col">Retention Rate</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="card about" aria-labelledby="about-head">
+        <h2 class="subhead" id="about-head">About these numbers</h2>
+        <dl id="about-list"></dl>
+      </section>
+    </div>
+   </div>
+  </main>
+
+  <footer class="wrap footer" id="footer"></footer>
+
+  <div class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" id="view-status"></div>
+  <div class="tip" id="tip" aria-hidden="true" hidden></div>
+  <noscript><p class="wrap">This dashboard needs JavaScript to display its charts and tables.</p></noscript>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const DATA = {"rows":[["uiuc",2025,2,1,142,131],["uiuc",2025,2,0,301,288],["uiuc",2025,7,1,132,127],["uiuc",2025,8,0,430,402],["uiuc",2025,4,0,1,1],["uiuc",2025,1,0,935,907],["uiuc",2025,9,1,886,817],["uiuc",2025,3,1,557,505],["uiuc",2025,8,1,818,739],["uiuc",2025,4,1,1,1],["uiuc",2025,9,0,1388,1331],["uiuc",2025,5,0,1628,1582],["uiuc",2025,0,0,2,2],["uiuc",2025,0,1,1,0],["uiuc",2025,5,1,1483,1421],["uiuc",2025,1,1,1216,1175],["uiuc",2025,7,0,86,81],["uiuc",2025,3,0,877,839],["uiuc",2025,6,0,207,201],["uiuc",2025,6,1,185,180],["uic",2025,8,1,149,130],["uic",2025,4,1,1,1],["uic",2025,9,0,1306,1019],["uic",2025,3,1,788,592],["uic",2025,9,1,1000,753],["uic",2025,4,0,0,0],["uic",2025,3,0,971,768],["uic",2025,2,1,161,125],["uic",2025,7,0,23,19],["uic",2025,2,0,258,186],["uic",2025,1,1,481,421],["uic",2025,8,0,128,116],["uic",2025,1,0,496,454],["uic",2025,0,1,1,1],["uic",2025,0,0,0,0],["uic",2025,5,1,361,313],["uic",2025,5,0,379,341],["uic",2025,6,1,49,34],["uic",2025,6,0,77,65],["uic",2025,7,1,33,28],["uis",2025,9,1,40,31],["uis",2025,9,0,63,39],["uis",2025,5,1,53,40],["uis",2025,5,0,74,51],["uis",2025,6,1,5,5],["uis",2025,6,0,4,1],["uis",2025,7,1,0,0],["uis",2025,7,0,0,0],["uis",2025,8,1,9,6],["uis",2025,8,0,4,2],["uis",2025,4,1,0,0],["uis",2025,4,0,0,0],["uis",2025,3,1,16,14],["uis",2025,3,0,22,11],["uis",2025,2,1,19,12],["uis",2025,2,0,37,27],["uis",2025,1,1,7,7],["uis",2025,1,0,7,5],["uis",2025,0,1,0,0],["uis",2025,0,0,0,0],["uiuc",2018,8,0,379,363],["uiuc",2018,1,0,634,604],["uiuc",2018,7,0,21,20],["uiuc",2018,7,1,24,23],["uiuc",2018,3,0,537,485],["uiuc",2018,0,0,1,1],["uiuc",2018,2,1,188,157],["uiuc",2018,2,0,311,270],["uiuc",2018,6,1,115,101],["uiuc",2018,5,0,1451,1388],["uiuc",2018,1,1,863,816],["uiuc",2018,6,0,136,126],["uiuc",2018,0,1,2,2],["uiuc",2018,3,1,459,396],["uic",2018,5,1,420,340],["uic",2018,5,0,454,367],["uic",2018,6,1,59,42],["uic",2018,7,0,1,1],["uic",2018,8,1,142,131],["uic",2018,4,1,1,1],["uic",2018,4,0,1,1],["uic",2018,3,1,685,503],["uic",2018,3,0,922,711],["uic",2018,2,1,107,74],["uic",2018,2,0,199,142],["uic",2018,8,0,61,54],["uic",2018,7,1,3,2],["uic",2018,1,1,468,413],["uic",2018,1,0,435,396],["uic",2018,0,1,1,1],["uic",2018,0,0,1,0],["uic",2018,6,0,54,39],["uis",2018,5,1,64,44],["uis",2018,5,0,80,72],["uis",2018,6,1,9,8],["uis",2018,6,0,6,6],["uis",2018,7,1,1,1],["uis",2018,7,0,0,0],["uis",2018,8,1,5,5],["uis",2018,8,0,3,2],["uis",2018,4,1,0,0],["uis",2018,4,0,0,0],["uis",2018,3,1,19,14],["uis",2018,3,0,32,23],["uis",2018,2,1,20,13],["uis",2018,2,0,31,22],["uis",2018,1,1,3,0],["uis",2018,1,0,2,2],["uis",2018,0,1,1,1],["uis",2018,0,0,1,1],["uiuc",2012,9,1,531,477],["uiuc",2012,9,0,611,575],["uiuc",2013,9,1,603,534],["uiuc",2013,9,0,638,591],["uiuc",2014,9,0,731,681],["uiuc",2014,9,1,672,593],["uiuc",2015,9,0,647,600],["uiuc",2015,9,1,628,552],["uiuc",2012,3,1,286,254],["uiuc",2012,1,0,449,433],["uiuc",2012,1,1,655,609],["uiuc",2012,4,1,5,4],["uiuc",2012,0,1,1,1],["uiuc",2012,0,0,2,1],["uiuc",2012,7,0,27,25],["uiuc",2012,5,0,1820,1739],["uiuc",2012,8,0,345,331],["uiuc",2012,4,0,4,4],["uiuc",2012,3,0,252,237],["uiuc",2012,6,1,89,81],["uiuc",2012,8,1,618,547],["uiuc",2012,5,1,2169,2047],["uiuc",2012,2,1,150,137],["uiuc",2012,6,0,103,95],["uiuc",2012,7,1,22,17],["uiuc",2012,2,0,250,238],["uiuc",2013,0,1,1,1],["uiuc",2013,2,0,221,198],["uiuc",2013,5,0,1538,1475],["uiuc",2013,4,1,5,3],["uiuc",2013,5,1,1989,1854],["uiuc",2013,2,1,190,164],["uiuc",2013,1,1,736,682],["uiuc",2013,1,0,467,456],["uiuc",2013,4,0,6,6],["uiuc",2013,3,0,306,287],["uiuc",2013,7,1,16,15],["uiuc",2013,0,0,3,3],["uiuc",2013,7,0,17,16],["uiuc",2013,6,1,90,80],["uiuc",2013,6,0,102,97],["uiuc",2013,8,0,314,299],["uiuc",2013,8,1,596,514],["uiuc",2013,3,1,317,286],["uiuc",2014,5,0,1578,1525],["uiuc",2014,2,0,268,248],["uiuc",2014,0,0,3,2],["uiuc",2014,0,1,2,1],["uiuc",2014,8,0,396,382],["uiuc",2014,8,1,774,683],["uiuc",2014,7,1,20,19],["uiuc",2014,3,0,364,343],["uiuc",2014,1,0,482,468],["uiuc",2014,4,0,3,2],["uiuc",2014,6,0,93,86],["uiuc",2014,7,0,18,17],["uiuc",2014,2,1,164,143],["uiuc",2014,3,1,380,335],["uiuc",2014,1,1,762,694],["uiuc",2014,6,1,122,110],["uiuc",2014,4,1,4,4],["uiuc",2014,5,1,1888,1781],["uiuc",2015,6,1,100,90],["uiuc",2015,0,0,4,4],["uiuc",2015,1,1,808,754],["uiuc",2015,5,1,1710,1610],["uiuc",2015,2,1,135,114],["uiuc",2015,6,0,88,83],["uiuc",2015,4,0,4,3],["uiuc",2015,1,0,543,518],["uiuc",2015,8,0,406,395],["uiuc",2015,2,0,221,197],["uiuc",2015,3,0,330,313],["uiuc",2015,5,0,1483,1414],["uiuc",2015,7,1,25,24],["uiuc",2015,0,1,2,2],["uiuc",2015,8,1,655,583],["uiuc",2015,3,1,390,345],["uiuc",2015,4,1,1,1],["uiuc",2015,7,0,21,21],["uis",2017,4,0,0,0],["uis",2017,4,1,0,0],["uis",2017,8,0,1,1],["uis",2017,7,0,1,0],["uis",2017,7,1,1,1],["uis",2017,6,0,3,2],["uis",2017,8,1,12,10],["uis",2017,6,1,2,2],["uis",2017,3,1,21,14],["uis",2017,5,0,90,72],["uis",2017,5,1,71,54],["uis",2017,0,1,0,0],["uiuc",2018,8,1,740,670],["uiuc",2018,4,1,4,4],["uiuc",2018,4,0,3,3],["uiuc",2016,0,0,1,1],["uiuc",2018,5,1,1634,1530],["uiuc",2016,1,0,582,561],["uic",2014,2,1,97,76],["uic",2014,3,0,463,355],["uic",2014,3,1,407,299],["uic",2014,6,0,46,33],["uiuc",2016,1,1,869,821],["uic",2014,4,0,0,0],["uic",2017,2,1,97,64],["uiuc",2016,2,0,271,250],["uiuc",2016,6,0,113,106],["uic",2017,3,0,674,520],["uic",2017,3,1,578,418],["uic",2017,4,0,0,0],["uiuc",2016,3,0,411,389],["uiuc",2016,3,1,402,352],["uiuc",2016,4,1,4,4],["uiuc",2016,8,0,441,421],["uiuc",2016,8,1,667,610],["uiuc",2016,7,1,34,30],["uiuc",2016,7,0,21,21],["uiuc",2016,4,0,1,1],["uiuc",2016,6,1,118,107],["uiuc",2016,5,0,1516,1442],["uiuc",2016,2,1,204,174],["uiuc",2016,0,1,4,4],["uiuc",2016,5,1,1897,1772],["uiuc",2017,3,0,472,421],["uiuc",2017,6,1,115,103],["uic",2017,4,1,2,1],["uic",2017,7,0,2,2],["uic",2017,6,1,38,29],["uic",2017,5,0,394,332],["uiuc",2021,2,1,189,164],["uiuc",2021,2,0,305,279],["uiuc",2021,7,1,65,61],["uiuc",2021,8,0,262,240],["uiuc",2021,4,0,1,1],["uiuc",2017,3,1,461,404],["uiuc",2021,1,0,704,677],["uiuc",2021,9,1,841,749],["uiuc",2021,3,1,521,464],["uic",2017,8,1,52,43],["uiuc",2021,8,1,639,573],["uiuc",2021,4,1,1,1],["uiuc",2017,1,1,828,775],["uis",2012,0,0,0,0],["uis",2012,0,1,0,0],["uis",2012,1,0,4,2],["uiuc",2017,5,0,1619,1547],["uiuc",2017,4,0,1,1],["uiuc",2017,4,1,1,1],["uiuc",2017,8,1,602,543],["uiuc",2017,0,1,3,2],["uiuc",2017,8,0,439,424],["uiuc",2017,7,0,8,8],["uiuc",2017,2,0,319,277],["uiuc",2017,2,1,226,180],["uiuc",2017,0,0,0,0],["uiuc",2017,7,1,13,13],["uiuc",2017,1,0,658,623],["uiuc",2017,5,1,1705,1583],["uiuc",2017,6,0,109,102],["uic",2012,0,0,1,1],["uic",2012,5,0,540,427],["uis",2012,1,1,6,3],["uis",2012,2,0,19,16],["uis",2012,2,1,15,14],["uis",2012,3,0,15,10],["uiuc",2021,9,0,1036,947],["uis",2012,3,1,2,2],["uis",2012,4,0,0,0],["uis",2012,4,1,0,0],["uis",2012,8,0,3,3],["uiuc",2021,5,0,1423,1359],["uis",2012,8,1,4,4],["uis",2012,7,0,3,3],["uis",2012,7,1,0,0],["uis",2012,6,0,8,5],["uis",2012,6,1,5,4],["uic",2012,0,1,3,1],["uis",2012,5,0,80,61],["uis",2012,5,1,75,45],["uiuc",2021,0,0,1,1],["uic",2012,1,0,385,338],["uic",2012,1,1,387,318],["uic",2012,6,0,47,38],["uic",2012,2,0,190,126],["uic",2012,2,1,76,54],["uic",2012,3,0,502,369],["uic",2012,3,1,325,239],["uic",2012,4,0,6,6],["uic",2012,4,1,10,7],["uic",2012,8,0,16,13],["uic",2012,8,1,25,23],["uic",2012,7,0,25,18],["uic",2012,7,1,21,17],["uic",2012,6,1,29,20],["uic",2012,5,1,509,396],["uic",2013,8,0,32,29],["uic",2013,0,0,2,1],["uiuc",2021,0,1,0,0],["uiuc",2021,5,1,1448,1373],["uiuc",2021,1,1,1008,959],["uiuc",2021,7,0,45,45],["uiuc",2021,3,0,597,545],["uiuc",2021,6,0,132,121],["uic",2013,0,1,2,2],["uic",2013,1,0,394,342],["uic",2013,1,1,411,353],["uic",2013,2,0,178,136],["uic",2013,5,0,449,356],["uic",2013,2,1,74,59],["uic",2013,6,0,50,39],["uic",2013,3,0,561,433],["uic",2013,3,1,383,286],["uiuc",2021,6,1,130,120],["uic",2021,8,1,73,62],["uic",2021,4,1,0,0],["uic",2021,9,0,1072,824],["uic",2014,4,1,4,3],["uic",2014,7,0,27,24],["uic",2021,3,1,599,435],["uic",2014,8,0,31,25],["uic",2021,9,1,730,530],["uic",2013,4,0,6,4],["uic",2014,8,1,35,29],["uic",2014,7,1,35,26],["uic",2013,4,1,11,10],["uic",2014,6,1,32,19],["uic",2014,5,1,501,381],["uic",2021,4,0,1,0],["uic",2021,3,0,829,640],["uic",2013,8,1,27,23],["uic",2021,2,1,87,61],["uic",2021,7,0,23,22],["uic",2021,2,0,179,139],["uic",2013,7,1,12,11],["uic",2013,7,0,27,20],["uic",2013,6,1,43,34],["uic",2013,5,1,439,336],["uic",2014,0,0,1,1],["uic",2014,0,1,2,2],["uic",2014,1,0,370,333],["uic",2014,1,1,415,367],["uic",2014,2,0,169,123],["uic",2014,5,0,444,358],["uic",2021,1,1,369,334],["uic",2021,8,0,58,51],["uic",2021,1,0,389,356],["uic",2021,0,1,0,0],["uic",2021,0,0,0,0],["uic",2021,5,1,341,285],["uic",2021,5,0,380,327],["uic",2021,6,1,44,34],["uic",2021,6,0,63,45],["uis",2016,1,1,3,1],["uis",2016,2,0,50,35],["uic",2021,7,1,20,17],["uis",2016,2,1,20,15],["uis",2016,3,0,26,15],["uic",2015,0,0,0,0],["uis",2016,3,1,8,5],["uic",2015,1,0,373,323],["uis",2016,4,0,0,0],["uic",2015,1,1,409,354],["uic",2015,2,0,188,154],["uic",2015,3,1,421,317],["uis",2016,4,1,0,0],["uis",2016,8,0,5,4],["uis",2016,8,1,4,3],["uic",2015,3,0,529,419],["uic",2015,4,0,1,1],["uis",2016,7,0,1,1],["uic",2015,4,1,0,0],["uic",2015,2,1,96,78],["uic",2015,8,0,24,22],["uic",2015,8,1,42,30],["uic",2015,7,0,8,7],["uis",2016,7,1,1,1],["uis",2016,6,0,6,3],["uis",2016,6,1,2,1],["uis",2021,9,1,40,28],["uis",2016,5,0,75,61],["uic",2015,7,1,7,6],["uis",2016,5,1,57,44],["uis",2017,0,0,0,0],["uis",2017,1,0,4,4],["uic",2015,6,0,39,31],["uis",2021,9,0,77,52],["uis",2017,1,1,1,1],["uic",2015,6,1,35,28],["uis",2017,2,0,42,35],["uic",2015,5,0,428,355],["uis",2017,2,1,19,13],["uic",2015,5,1,411,328],["uis",2021,5,1,75,45],["uis",2021,5,0,77,53],["uis",2021,6,1,3,2],["uis",2021,6,0,7,5],["uis",2017,3,0,27,20],["uis",2021,7,1,0,0],["uis",2013,0,0,0,0],["uis",2013,0,1,0,0],["uis",2013,1,0,1,1],["uis",2013,1,1,6,5],["uis",2013,2,0,51,43],["uis",2013,2,1,16,14],["uis",2021,7,0,3,2],["uis",2021,8,1,5,4],["uis",2013,3,0,27,16],["uis",2013,3,1,17,10],["uis",2013,4,0,1,1],["uis",2021,8,0,2,2],["uis",2013,4,1,0,0],["uis",2013,8,0,5,5],["uis",2013,8,1,11,9],["uis",2013,7,0,1,0],["uis",2013,7,1,0,0],["uis",2021,4,1,0,0],["uis",2013,6,0,4,4],["uis",2021,4,0,0,0],["uis",2013,6,1,3,1],["uis",2013,5,0,63,44],["uis",2013,5,1,63,47],["uis",2021,3,1,21,17],["uis",2014,0,0,0,0],["uis",2021,3,0,30,20],["uis",2021,2,1,16,9],["uis",2021,2,0,40,27],["uis",2021,1,1,8,7],["uic",2015,0,1,0,0],["uic",2016,0,0,1,0],["uic",2016,0,1,0,0],["uic",2016,1,0,390,360],["uic",2016,1,1,430,357],["uic",2016,2,0,213,151],["uic",2016,2,1,102,70],["uis",2014,0,1,0,0],["uis",2014,1,0,6,5],["uic",2016,3,0,600,459],["uic",2016,3,1,556,421],["uic",2016,4,0,4,4],["uis",2021,1,0,5,2],["uic",2016,4,1,3,3],["uic",2016,8,0,48,41],["uic",2016,8,1,55,49],["uic",2016,7,0,9,7],["uic",2016,7,1,9,7],["uic",2016,6,0,58,45],["uis",2021,0,1,0,0],["uic",2016,6,1,47,35],["uic",2016,5,0,475,384],["uic",2016,5,1,462,375],["uis",2021,0,0,0,0],["uic",2017,5,1,424,344],["uic",2017,6,0,62,50],["uic",2017,0,0,0,0],["uis",2014,1,1,5,5],["uis",2014,2,0,59,46],["uis",2014,2,1,22,19],["uis",2014,3,0,23,20],["uis",2014,3,1,9,6],["uis",2014,4,0,1,1],["uiuc",2019,8,1,607,549],["uiuc",2019,4,1,6,6],["uiuc",2019,7,0,26,26],["uiuc",2019,5,1,1633,1519],["uiuc",2019,8,0,329,316],["uiuc",2019,2,1,176,149],["uiuc",2019,0,1,2,2],["uiuc",2019,0,0,1,1],["uiuc",2019,6,1,155,139],["uiuc",2019,9,1,858,737],["uiuc",2019,1,0,643,611],["uiuc",2019,2,0,297,264],["uic",2017,0,1,0,0],["uic",2017,1,0,367,333],["uic",2017,1,1,347,300],["uic",2017,7,1,3,3],["uic",2017,8,0,38,33],["uic",2017,2,0,193,139],["uis",2014,4,1,0,0],["uis",2014,8,0,3,3],["uis",2014,8,1,4,3],["uis",2014,7,0,2,1],["uis",2014,7,1,1,1],["uis",2014,6,0,7,7],["uis",2014,6,1,3,3],["uis",2014,5,0,99,79],["uis",2014,5,1,68,48],["uis",2015,0,0,0,0],["uis",2015,0,1,0,0],["uis",2015,1,0,5,5],["uis",2015,1,1,5,4],["uis",2015,2,0,59,47],["uis",2015,2,1,26,17],["uis",2015,3,0,19,15],["uis",2015,3,1,15,13],["uis",2015,4,0,0,0],["uis",2015,4,1,0,0],["uis",2015,8,0,5,3],["uis",2015,8,1,7,6],["uis",2015,7,0,1,0],["uis",2015,7,1,0,0],["uis",2015,6,0,9,9],["uis",2015,6,1,3,2],["uis",2015,5,0,70,52],["uis",2015,5,1,78,59],["uis",2016,0,0,0,0],["uis",2016,0,1,1,1],["uis",2016,1,0,5,4],["uis",2020,6,0,9,8],["uis",2020,7,1,2,1],["uiuc",2019,7,1,49,45],["uis",2020,7,0,2,2],["uis",2020,8,1,10,8],["uiuc",2019,9,0,997,923],["uis",2020,8,0,0,0],["uiuc",2019,6,0,130,126],["uis",2020,4,1,0,0],["uiuc",2019,1,1,938,877],["uiuc",2019,4,0,2,2],["uiuc",2019,5,0,1517,1453],["uis",2020,4,0,0,0],["uis",2020,3,1,26,17],["uis",2020,3,0,40,24],["uiuc",2019,3,0,567,530],["uiuc",2019,3,1,519,441],["uis",2020,2,1,33,21],["uic",2019,9,1,834,594],["uic",2019,9,0,1282,976],["uic",2019,5,1,435,339],["uic",2019,6,1,55,44],["uic",2019,6,0,79,59],["uis",2020,2,0,50,31],["uis",2020,1,1,4,4],["uis",2020,1,0,2,2],["uic",2019,7,0,4,3],["uis",2020,0,1,0,0],["uic",2019,8,1,170,144],["uis",2020,0,0,0,0],["uiuc",2016,9,1,732,641],["uiuc",2016,9,0,797,747],["uic",2019,8,0,98,80],["uic",2019,7,1,5,5],["uiuc",2017,9,1,806,690],["uic",2019,4,1,0,0],["uiuc",2017,9,0,901,801],["uic",2019,5,0,435,361],["uiuc",2018,9,1,768,660],["uic",2019,4,0,0,0],["uic",2019,3,1,665,465],["uic",2019,3,0,976,761],["uic",2019,2,1,114,85],["uic",2019,2,0,225,155],["uiuc",2018,9,0,988,885],["uic",2019,1,1,409,351],["uic",2012,9,1,443,321],["uic",2012,9,0,746,540],["uic",2013,9,1,513,391],["uic",2013,9,0,797,613],["uic",2014,9,1,542,399],["uic",2014,9,0,679,512],["uic",2019,1,0,436,400],["uic",2019,0,1,0,0],["uic",2015,9,1,552,423],["uic",2015,9,0,757,605],["uic",2016,9,1,708,529],["uic",2019,0,0,2,1],["uic",2016,9,0,876,659],["uic",2017,9,1,715,512],["uic",2017,9,0,929,709],["uic",2018,9,1,853,621],["uic",2018,9,0,1177,893],["uis",2019,9,1,46,35],["uis",2012,9,1,22,20],["uis",2019,9,0,100,76],["uis",2012,9,0,42,31],["uis",2013,9,1,36,25],["uis",2013,9,0,83,64],["uis",2019,5,1,68,52],["uis",2014,9,1,34,28],["uis",2019,5,0,76,66],["uis",2019,6,1,4,4],["uis",2019,6,0,7,5],["uis",2019,7,1,0,0],["uis",2019,7,0,0,0],["uis",2019,8,1,8,6],["uis",2019,8,0,5,5],["uis",2019,4,1,0,0],["uis",2019,4,0,0,0],["uis",2019,3,1,13,8],["uis",2019,3,0,41,33],["uis",2014,9,0,90,74],["uis",2015,9,1,44,32],["uis",2019,2,1,29,23],["uis",2019,2,0,51,38],["uis",2019,1,1,7,4],["uis",2019,1,0,3,3],["uis",2019,0,1,0,0],["uis",2019,0,0,1,0],["uiuc",2020,8,1,665,585],["uiuc",2020,4,1,1,1],["uiuc",2020,7,0,34,34],["uiuc",2020,5,1,1590,1500],["uiuc",2020,8,0,295,274],["uiuc",2020,2,1,200,182],["uiuc",2020,0,1,0,0],["uiuc",2020,0,0,2,2],["uiuc",2020,6,1,131,125],["uiuc",2020,9,1,841,768],["uiuc",2020,1,0,676,650],["uiuc",2020,2,0,320,304],["uis",2015,9,0,87,71],["uis",2016,9,1,31,22],["uis",2016,9,0,82,53],["uis",2017,9,1,42,29],["uis",2017,9,0,72,57],["uis",2018,9,1,49,36],["uis",2018,9,0,70,52],["uiuc",2022,2,1,168,151],["uiuc",2022,2,0,279,247],["uiuc",2022,7,1,77,70],["uiuc",2022,8,0,300,284],["uiuc",2022,4,0,1,0],["uiuc",2022,1,0,934,906],["uiuc",2022,9,1,817,744],["uiuc",2022,3,1,480,434],["uiuc",2022,8,1,821,729],["uiuc",2020,7,1,51,48],["uiuc",2020,9,0,1076,1019],["uiuc",2020,6,0,118,112],["uiuc",2020,1,1,937,885],["uiuc",2020,4,0,2,2],["uiuc",2020,5,0,1495,1426],["uiuc",2020,3,0,634,599],["uiuc",2020,3,1,509,460],["uic",2020,9,1,924,680],["uic",2020,9,0,1349,1083],["uic",2020,5,1,431,364],["uic",2020,6,1,59,50],["uic",2020,6,0,66,51],["uic",2020,7,0,15,12],["uic",2020,8,1,146,122],["uic",2020,8,0,109,95],["uic",2020,7,1,20,13],["uic",2020,4,1,0,0],["uic",2020,5,0,422,344],["uic",2020,4,0,0,0],["uic",2020,3,1,747,539],["uic",2020,3,0,1055,860],["uic",2020,2,1,116,90],["uic",2020,2,0,228,172],["uic",2020,1,1,446,409],["uic",2020,1,0,514,477],["uic",2020,0,1,2,1],["uic",2020,0,0,0,0],["uis",2020,9,1,65,44],["uis",2020,9,0,99,63],["uis",2020,5,1,81,61],["uis",2020,5,0,104,88],["uis",2020,6,1,6,6],["uiuc",2022,4,1,2,2],["uiuc",2022,9,0,1080,965],["uiuc",2022,5,0,1463,1403],["uiuc",2022,0,0,1,0],["uiuc",2022,0,1,4,4],["uiuc",2022,5,1,1489,1388],["uiuc",2022,1,1,1240,1179],["uiuc",2022,7,0,52,52],["uiuc",2022,3,0,618,548],["uiuc",2022,6,0,181,170],["uiuc",2022,6,1,163,153],["uic",2022,8,1,111,95],["uic",2022,4,1,0,0],["uic",2022,9,0,1271,941],["uic",2022,3,1,693,484],["uic",2022,9,1,839,599],["uic",2022,4,0,0,0],["uic",2022,3,0,980,727],["uic",2022,2,1,93,75],["uic",2022,7,0,27,19],["uic",2022,2,0,225,167],["uic",2022,1,1,427,371],["uic",2022,8,0,91,83],["uic",2022,1,0,461,410],["uic",2022,0,1,0,0],["uic",2022,0,0,2,2],["uic",2022,5,1,366,283],["uic",2022,5,0,396,325],["uic",2022,6,1,53,40],["uic",2022,6,0,64,45],["uic",2022,7,1,34,25],["uis",2022,9,1,29,22],["uis",2022,9,0,61,44],["uis",2022,5,1,55,41],["uis",2022,5,0,88,67],["uis",2022,6,1,1,1],["uis",2022,6,0,6,5],["uis",2022,7,1,3,2],["uis",2022,7,0,3,3],["uis",2022,8,1,5,5],["uis",2022,8,0,6,6],["uis",2022,4,1,0,0],["uis",2022,4,0,1,1],["uis",2022,3,1,14,11],["uis",2022,3,0,31,24],["uis",2022,2,1,14,10],["uis",2022,2,0,23,14],["uis",2022,1,1,5,3],["uis",2022,1,0,5,4],["uis",2022,0,1,0,0],["uis",2022,0,0,0,0],["uiuc",2023,2,1,162,139],["uiuc",2023,2,0,280,255],["uiuc",2023,7,1,73,69],["uiuc",2023,8,0,445,417],["uiuc",2023,4,0,0,0],["uiuc",2023,1,0,835,810],["uiuc",2023,9,1,722,657],["uiuc",2023,3,1,434,396],["uiuc",2023,8,1,887,804],["uiuc",2023,4,1,2,2],["uiuc",2023,9,0,1054,982],["uiuc",2023,5,0,1481,1431],["uiuc",2023,0,0,1,1],["uiuc",2023,0,1,1,1],["uiuc",2023,5,1,1436,1364],["uiuc",2023,1,1,955,905],["uiuc",2023,7,0,55,53],["uiuc",2023,3,0,631,590],["uiuc",2023,6,0,142,136],["uiuc",2023,6,1,123,119],["uic",2023,8,1,163,143],["uic",2023,4,1,1,1],["uic",2023,9,0,1303,937],["uic",2023,3,1,709,494],["uic",2023,9,1,891,625],["uic",2023,4,0,0,0],["uic",2023,3,0,1027,741],["uic",2023,2,1,122,86],["uic",2023,7,0,46,36],["uic",2023,2,0,217,151],["uic",2023,1,1,466,407],["uic",2023,8,0,116,100],["uic",2023,1,0,433,383],["uic",2023,0,1,4,2],["uic",2023,0,0,0,0],["uic",2023,5,1,341,287],["uic",2023,5,0,393,337],["uic",2023,6,1,55,42],["uic",2023,6,0,59,45],["uic",2023,7,1,23,17],["uis",2023,9,1,27,20],["uis",2023,9,0,57,48],["uis",2023,5,1,57,47],["uis",2023,5,0,74,57],["uis",2023,6,1,3,2],["uis",2023,6,0,4,4],["uis",2023,7,1,0,0],["uis",2023,7,0,5,3],["uis",2023,8,1,8,8],["uis",2023,8,0,6,5],["uis",2023,4,1,0,0],["uis",2023,4,0,0,0],["uis",2023,3,1,10,4],["uis",2023,3,0,34,30],["uis",2023,2,1,14,14],["uis",2023,2,0,19,14],["uis",2023,1,1,4,3],["uis",2023,1,0,5,5],["uis",2023,0,1,0,0],["uis",2023,0,0,0,0],["uiuc",2024,2,1,173,158],["uiuc",2024,2,0,274,252],["uiuc",2024,7,1,76,71],["uiuc",2024,8,0,397,366],["uiuc",2024,4,0,1,1],["uiuc",2024,1,0,916,891],["uiuc",2024,9,1,849,781],["uiuc",2024,3,1,495,450],["uiuc",2024,8,1,703,618],["uiuc",2024,4,1,1,1],["uiuc",2024,9,0,1202,1121],["uiuc",2024,5,0,1556,1509],["uiuc",2024,0,0,0,0],["uiuc",2024,0,1,3,3],["uiuc",2024,5,1,1477,1428],["uiuc",2024,1,1,1084,1045],["uiuc",2024,7,0,54,52],["uiuc",2024,3,0,756,704],["uiuc",2024,6,0,171,164],["uiuc",2024,6,1,177,169],["uic",2024,8,1,160,135],["uic",2024,4,1,0,0],["uic",2024,9,0,1385,1036],["uic",2024,3,1,821,578],["uic",2024,9,1,1031,734],["uic",2024,4,0,2,2],["uic",2024,3,0,1032,765],["uic",2024,2,1,161,119],["uic",2024,7,0,30,23],["uic",2024,2,0,275,205],["uic",2024,1,1,503,446],["uic",2024,8,0,122,112],["uic",2024,1,0,480,444],["uic",2024,0,1,0,0],["uic",2024,0,0,0,0],["uic",2024,5,1,406,341],["uic",2024,5,0,418,368],["uic",2024,6,1,49,37],["uic",2024,6,0,76,64],["uic",2024,7,1,28,21],["uis",2024,9,1,34,22],["uiuc",2026,2,1,171,157],["uiuc",2026,2,0,303,288],["uiuc",2026,7,1,142,134],["uiuc",2026,8,0,500,468],["uiuc",2026,4,0,1,1],["uiuc",2026,1,0,835,814],["uiuc",2026,9,1,946,886],["uiuc",2026,3,1,561,522],["uiuc",2026,8,1,933,840],["uiuc",2026,4,1,0,0],["uiuc",2026,9,0,1346,1273],["uiuc",2026,5,0,1737,1674],["uiuc",2026,0,0,2,2],["uiuc",2026,0,1,1,1],["uiuc",2026,5,1,1473,1417],["uiuc",2026,1,1,1163,1105],["uiuc",2026,7,0,120,113],["uiuc",2026,3,0,837,791],["uiuc",2026,6,0,203,191],["uiuc",2026,6,1,213,206],["uic",2026,8,1,121,108],["uic",2026,4,1,1,1],["uic",2026,9,0,1672,1327],["uic",2026,3,1,1021,746],["uic",2026,9,1,1276,947],["uic",2026,4,0,0,0],["uic",2026,3,0,1210,975],["uic",2026,2,1,191,148],["uic",2026,7,0,62,47],["uic",2026,2,0,362,273],["uic",2026,1,1,536,483],["uic",2026,8,0,134,113],["uic",2026,1,0,534,475],["uic",2026,0,1,2,2],["uic",2026,0,0,0,0],["uic",2026,5,1,480,414],["uic",2026,5,0,446,379],["uic",2026,6,1,61,50],["uic",2026,6,0,100,79],["uic",2026,7,1,66,49],["uis",2026,9,1,47,31],["uis",2026,9,0,76,53],["uis",2026,5,1,66,47],["uis",2026,5,0,93,77],["uis",2026,6,1,5,4],["uis",2026,6,0,8,7],["uis",2026,7,1,2,1],["uis",2026,7,0,2,1],["uis",2026,8,1,7,6],["uis",2026,8,0,5,5],["uis",2026,4,1,0,0],["uis",2026,4,0,0,0],["uis",2026,3,1,12,7],["uis",2026,3,0,26,19],["uis",2026,2,1,29,20],["uis",2026,2,0,41,27],["uis",2026,1,1,3,1],["uis",2026,1,0,8,8],["uis",2026,0,1,1,0],["uis",2026,0,0,1,0],["uis",2024,9,0,64,47],["uis",2024,5,1,51,42],["uis",2024,5,0,83,63],["uis",2024,6,1,6,4],["uis",2024,6,0,9,8],["uis",2024,7,1,1,1],["uis",2024,7,0,2,1],["uis",2024,8,1,1,1],["uis",2024,8,0,10,7],["uis",2024,4,1,0,0],["uis",2024,4,0,1,1],["uis",2024,3,1,17,11],["uis",2024,3,0,26,20],["uis",2024,2,1,11,7],["uis",2024,2,0,27,17],["uis",2024,1,1,4,3],["uis",2024,1,0,4,3],["uis",2024,0,1,0,0],["uis",2024,0,0,1,1]],"races":["American Indian or Alaska Native","Asian","Black or African American","Hispanic/Latino","Native Hawaiian or Other Pacific Islander","White","Two or more races","Race and ethnicity unknown","U.S. Nonresident","Underrepresented Minorities"],"urm":9,"sexes":["Female","Male"],"cohortTerm":{"2012":"Fall 2011","2013":"Fall 2012","2014":"Fall 2013","2015":"Fall 2014","2016":"Fall 2015","2017":"Fall 2016","2018":"Fall 2017","2019":"Fall 2018","2020":"Fall 2019","2021":"Fall 2020","2022":"Fall 2021","2023":"Fall 2022","2024":"Fall 2023","2025":"Fall 2024","2026":"Fall 2025"},"urmParts":["Black or African American","Hispanic/Latino","American Indian or Alaska Native","Native Hawaiian or Other Pacific Islander","Two or more races"],"loadDate":"2026-10-15"};
+
+  const MIN_N = 10;
+  const SUPP = 'Too Few Records to Display';
+  const VIEW_ORDER = ['system', 'uiuc', 'uic', 'uis'];
+  const VIEWS = {
+    system: { label: 'U of I System', name: 'University of Illinois System', hero: '#0455A4', onHero: '#FFFFFF' },
+    uiuc:   { label: 'Urbana-Champaign', name: 'University of Illinois Urbana-Champaign', hero: '#FF5F0F', onHero: '#13294B' },
+    uic:    { label: 'Chicago', name: 'University of Illinois Chicago', hero: '#D50032', onHero: '#FFFFFF' },
+    uis:    { label: 'Springfield', name: 'University of Illinois Springfield', hero: '#003366', onHero: '#FFFFFF' }
+  };
+  const C = { navy: '#13294B', muted: '#5E6669', mid: '#A5A8AA', light: '#E8E9EA' };
+
+  const ROWS = DATA.rows;           // [view, year, raceIndex, sexIndex, cohort, retained]
+  const RACES = DATA.races;
+  const URM = DATA.urm;
+  const SEXES = DATA.sexes;
+  const YEARS_SHOWN = 10;
+  const ALL_YEARS = Array.from(new Set(ROWS.map(r => r[1]))).sort((a, b) => a - b);
+  const YEARS = ALL_YEARS.slice(-YEARS_SHOWN);
+  const MINY = YEARS[0];
+  const MAXY = YEARS[YEARS.length - 1];
+
+  const DEFAULTS = { view: 'system', year: MAXY, race: 'all', sex: 'all' };
+  const state = Object.assign({}, DEFAULTS, { view: initialView() });
+  let pendingFocusYear = null;  // keeps keyboard focus on the chart point after the chart redraws
+
+  const $ = (sel) => document.querySelector(sel);
+  const NS = 'http://www.w3.org/2000/svg';
+
+  function initialView() {
+    let v = null;
+    try { v = new URLSearchParams(window.location.search).get('view'); } catch (e) { v = null; }
+    return Object.prototype.hasOwnProperty.call(VIEWS, v) ? v : 'system';
+  }
+
+  /* ---------- Data ---------- */
+  const cache = new Map();
+  function agg(view, year, race, sex) {
+    const key = view + '|' + year + '|' + race + '|' + sex;
+    if (cache.has(key)) return cache.get(key);
+    let D = 0, N = 0, n = 0;
+    for (const r of ROWS) {
+      if (r[1] !== year) continue;
+      if (view !== 'system' && r[0] !== view) continue;
+      if (race === 'all') { if (r[2] === URM) continue; }
+      else if (r[2] !== race) continue;
+      if (sex !== 'all' && r[3] !== sex) continue;
+      D += r[4]; N += r[5]; n += 1;
+    }
+    const out = { year: year, D: D, N: N, reported: n > 0, ok: n > 0 && D >= MIN_N, rate: D > 0 ? (N / D) * 100 : null };
+    cache.set(key, out);
+    return out;
+  }
+  function prevYear(y) { const i = ALL_YEARS.indexOf(y); return i > 0 ? ALL_YEARS[i - 1] : null; }
+  function series(view, race, sex) { return YEARS.map(y => agg(view, y, race, sex)); }
+  function stats(ser, y) {
+    const ok = ser.filter(d => d.ok);
+    const cur = ser.find(d => d.year === y);
+    const avg = ok.length ? ok.reduce((a, d) => a + d.rate, 0) / ok.length : null;
+    let rank = null, tie = false;
+    if (cur && cur.ok) {
+      rank = 1 + ok.filter(d => d.rate > cur.rate + 1e-9).length;
+      tie = ok.filter(d => Math.abs(d.rate - cur.rate) < 1e-9).length > 1;
+    }
+    return { ok: ok, n: ok.length, avg: avg, rank: rank, tie: tie };
+  }
+  function unavailable(a, view) {
+    return a && a.reported ? SUPP : 'Not reported for ' + VIEWS[view].name;
+  }
+
+  /* ---------- Formatting ---------- */
+  const fmtInt = (n) => n.toLocaleString('en-US');
+  // Rates are shown as whole percentages. Changes are the difference between the two
+  // rounded rates shown, so a change always matches the numbers next to it.
+  const pct = (v) => Math.round(v);
+  const fmtPct = (v) => pct(v) + '%';
+  function ptsDelta(curRate, preRate, kind) {
+    const r = pct(curRate) - pct(preRate);
+    if (r === 0) return { g: '–', sr: '', text: 'No change', cls: 'none' };
+    const up = r > 0, n = Math.abs(r);
+    return {
+      g: up ? '▲' : '▼', sr: up ? 'Up ' : 'Down ',
+      text: (up ? '+' : '−') + n + (n === 1 ? ' pt' : ' pts'),
+      cls: kind === 'neutral' ? 'neutral' : (up ? 'fav' : 'unfav')
+    };
+  }
+  function countDelta(d, kind) {
+    if (d === 0) return { g: '–', sr: '', text: 'No change', cls: 'none' };
+    const up = d > 0;
+    return {
+      g: up ? '▲' : '▼', sr: up ? 'Up ' : 'Down ',
+      text: (up ? '+' : '−') + fmtInt(Math.abs(d)),
+      cls: kind === 'neutral' ? 'neutral' : (up ? 'fav' : 'unfav')
+    };
+  }
+  function writeDelta(el, delta, suffix) {
+    el.textContent = '';
+    const g = document.createElement('span');
+    g.className = 'g ' + delta.cls;
+    g.setAttribute('aria-hidden', 'true');
+    g.textContent = delta.g;
+    el.appendChild(g);
+    if (delta.sr) {
+      const sr = document.createElement('span');
+      sr.className = 'visually-hidden';
+      sr.textContent = delta.sr;
+      el.appendChild(sr);
+    }
+    el.appendChild(document.createTextNode(' ' + delta.text + (suffix || '')));
+  }
+  /* How a race/ethnicity group reads inside a sentence. Labels are the data's own;
+     groups not listed here read naturally in front of "freshmen". */
+  const RACE_PHRASE = {
+    'Two or more races': { after: 'of two or more races' },
+    'Race and ethnicity unknown': { after: 'with unknown race and ethnicity' },
+    'Underrepresented Minorities': { after: 'from the Underrepresented Minorities group' }
+  };
+  function groupPhrase() {
+    const race = state.race === 'all' ? null : RACES[state.race];
+    const sex = state.sex === 'all' ? null : SEXES[state.sex].toLowerCase();
+    const rp = race ? (RACE_PHRASE[race] || { before: race }) : {};
+    const words = [];
+    if (!race && !sex) words.push('all');
+    if (rp.before) words.push(rp.before);
+    if (sex) words.push(sex);
+    words.push('first-time, full-time freshmen');
+    if (rp.after) words.push(rp.after);
+    return words.join(' ');
+  }
+  function scopeSentence() {
+    const v = state.view;
+    return 'Retention for ' + groupPhrase() + (v === 'system' ? ' in the ' : ' at the ') + VIEWS[v].name;
+  }
+  function cohortSentence(year) {
+    const g = groupPhrase();
+    return g.charAt(0).toUpperCase() + g.slice(1) + ' who entered the ' + VIEWS[state.view].name +
+      ' in ' + DATA.cohortTerm[String(year)] + '.';
+  }
+  function yearsPhrase(n) { return n === YEARS.length ? n + ' years' : n + ' reported years'; }
+
+  /* ---------- SVG helpers ---------- */
+  function svgEl(tag, attrs, parent) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) { if (attrs[k] !== null && attrs[k] !== undefined) e.setAttribute(k, attrs[k]); }
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function svgText(parent, x, y, str, attrs) {
+    const e = svgEl('text', Object.assign({ x: x, y: y }, attrs || {}), parent);
+    e.textContent = str;
+    return e;
+  }
+  function newSvg(box, W, H, label) {
+    box.textContent = '';
+    return svgEl('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': label }, box);
+  }
+
+  /* ---------- Tooltip ----------
+     Shows on hover or keyboard focus, stays while the pointer is over it (so it can be read),
+     and closes with Esc (WCAG 1.4.13). Its text is also each point's accessible name. */
+  const tip = $('#tip');
+  let tipOwner = null, tipAnchor = null, pointerOnHit = false, pointerOnTip = false;
+  function showTip(owner, anchor, lines) {
+    tip.textContent = '';
+    lines.forEach((l, i) => {
+      const d = document.createElement(i === 0 ? 'strong' : 'div');
+      if (typeof l === 'string') d.textContent = l;
+      else { d.textContent = l.text; d.className = l.cls; }
+      tip.appendChild(d);
+    });
+    tipOwner = owner; tipAnchor = anchor;
+    tip.hidden = false;
+    placeTip();
+  }
+  function placeTip() {
+    if (tip.hidden || !tipAnchor || !tipAnchor.isConnected) return;
+    const r = tipAnchor.getBoundingClientRect();
+    const gap = 12, w = tip.offsetWidth, h = tip.offsetHeight;
+    let x = r.right + gap;
+    if (x + w > window.innerWidth - 8) x = r.left - w - gap;
+    let y = r.top + r.height / 2 - h / 2;
+    y = Math.min(Math.max(8, y), window.innerHeight - h - 8);
+    tip.style.left = Math.max(8, x) + 'px';
+    tip.style.top = y + 'px';
+  }
+  function hideTip() { tip.hidden = true; tipOwner = null; tipAnchor = null; }
+  function maybeHideTip() {
+    setTimeout(() => {
+      if (!pointerOnHit && !pointerOnTip && (!tipOwner || document.activeElement !== tipOwner)) hideTip();
+    }, 150);
+  }
+  tip.addEventListener('mouseenter', () => { pointerOnTip = true; });
+  tip.addEventListener('mouseleave', () => { pointerOnTip = false; maybeHideTip(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !tip.hidden) hideTip(); });
+  function rateLines(a, view) {
+    if (!a.ok) return [unavailable(a, view)];
+    return ['Retention rate: ' + fmtPct(a.rate), fmtInt(a.N) + ' of ' + fmtInt(a.D) + ' students enrolled in their second term'];
+  }
+
+  /* ---------- Filters ---------- */
+  function buildFilters() {
+    const seg = $('#seg-group');
+    const vs = $('#view-select');
+    // View tabs (WAI-ARIA Authoring Practices tabs pattern, automatic activation):
+    // one Tab stop; Left/Right arrows move and select (wrapping); Home/End jump to first/last.
+    VIEW_ORDER.forEach((v, i) => {
+      const tab = document.createElement('button');
+      tab.type = 'button'; tab.className = 'seg'; tab.id = 'tab-' + v;
+      tab.setAttribute('role', 'tab');
+      tab.setAttribute('aria-controls', 'view-panel');
+      tab.setAttribute('aria-selected', 'false');
+      tab.tabIndex = -1;
+      tab.style.setProperty('--dot', VIEWS[v].hero);
+      tab.style.setProperty('--seg-on', VIEWS[v].onHero);
+      const dot = document.createElement('span');
+      dot.className = 'dot'; dot.setAttribute('aria-hidden', 'true');
+      tab.append(dot, document.createTextNode(VIEWS[v].label));
+      tab.addEventListener('click', () => setState({ view: v }));
+      tab.addEventListener('keydown', (e) => {
+        const n = VIEW_ORDER.length;
+        let j = null;
+        if (e.key === 'ArrowRight') j = (i + 1) % n;
+        else if (e.key === 'ArrowLeft') j = (i - 1 + n) % n;
+        else if (e.key === 'Home') j = 0;
+        else if (e.key === 'End') j = n - 1;
+        if (j === null) return;
+        e.preventDefault();
+        document.getElementById('tab-' + VIEW_ORDER[j]).focus();
+        setState({ view: VIEW_ORDER[j] });
+      });
+      seg.appendChild(tab);
+      const opt = document.createElement('option');
+      opt.value = v; opt.textContent = VIEWS[v].label;
+      vs.appendChild(opt);
+    });
+    vs.addEventListener('change', () => setState({ view: vs.value }));
+
+    const fy = $('#f-year');
+    YEARS.slice().reverse().forEach(y => {
+      const o = document.createElement('option'); o.value = String(y); o.textContent = String(y); fy.appendChild(o);
+    });
+    fy.addEventListener('change', () => setState({ year: Number(fy.value) }));
+
+    const fr = $('#f-race');
+    // Groups follow WCAG technique H85 (optgroup). The first group lists the combined
+    // Underrepresented Minorities option followed by the races and ethnicities it includes
+    // (taken from the data), so the group's makeup is conveyed by its structure.
+    const addOpt = (parent, value, text) => { const o = document.createElement('option'); o.value = String(value); o.textContent = text; parent.appendChild(o); };
+    addOpt(fr, 'all', 'All races and ethnicities');
+    const urmParts = RACES.map((r, i) => i).filter(i => i !== URM && DATA.urmParts.includes(RACES[i]));
+    const others = RACES.map((r, i) => i).filter(i => i !== URM && !DATA.urmParts.includes(RACES[i]));
+    const og1 = document.createElement('optgroup'); og1.label = 'Underrepresented Minorities';
+    addOpt(og1, URM, 'All Underrepresented Minorities (combined)');
+    urmParts.forEach(i => addOpt(og1, i, RACES[i]));
+    fr.appendChild(og1);
+    const og2 = document.createElement('optgroup'); og2.label = 'Other race/ethnicity groups';
+    others.forEach(i => addOpt(og2, i, RACES[i]));
+    fr.appendChild(og2);
+    fr.addEventListener('change', () => setState({ race: fr.value === 'all' ? 'all' : Number(fr.value) }));
+
+    const fs = $('#f-sex');
+    const sa = document.createElement('option'); sa.value = 'all'; sa.textContent = 'All'; fs.appendChild(sa);
+    SEXES.forEach((s, i) => { const o = document.createElement('option'); o.value = String(i); o.textContent = s; fs.appendChild(o); });
+    fs.addEventListener('change', () => setState({ sex: fs.value === 'all' ? 'all' : Number(fs.value) }));
+
+    $('#reset').addEventListener('click', () => setState(Object.assign({}, DEFAULTS), 'reset'));
+
+    // Skip link: move focus to the main content without changing the page address
+    $('#skip-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      const main = $('#main');
+      main.focus({ preventScroll: true });
+      main.scrollIntoView({ block: 'start' });
+    });
+  }
+
+  function syncFilters() {
+    VIEW_ORDER.forEach(v => {
+      const tab = document.getElementById('tab-' + v), on = v === state.view;
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      tab.tabIndex = on ? 0 : -1;
+      tab.classList.toggle('is-checked', on);
+    });
+    $('#view-panel').setAttribute('aria-labelledby', 'tab-' + state.view);
+    $('#view-select').value = state.view;
+    $('#f-year').value = String(state.year);
+    $('#f-race').value = String(state.race);
+    $('#f-sex').value = String(state.sex);
+  }
+
+  // Status messages (WCAG 4.1.3): the role="status" container is in the page from the start.
+  // It is emptied and refilled after a short pause so every change is announced, even when
+  // the message is the same as the last one (for example, pressing Reset filters twice).
+  let announceTimer = 0;
+  function announce(msg) {
+    const el = $('#view-status');
+    el.textContent = '';
+    clearTimeout(announceTimer);
+    announceTimer = setTimeout(() => { el.textContent = msg; }, 250);
+  }
+  function currentScopeMessage() {
+    const s = scopeSentence();
+    return 'Showing ' + s.charAt(0).toLowerCase() + s.slice(1) + ', ' + state.year + '.';
+  }
+  function setState(patch, source) {
+    Object.assign(state, patch);
+    hideTip();
+    render();
+    $('#reset-note').hidden = source !== 'reset';
+    announce((source === 'reset' ? 'Filters reset. ' : '') + currentScopeMessage());
+  }
+
+  /* ---------- KPIs ---------- */
+  function setValue(el, text, isNumber) {
+    el.textContent = text;
+    el.classList.toggle('is-unavailable', !isNumber);
+  }
+  function kpiDelta(el, delta, suffix) {
+    writeDelta(el, delta, suffix);
+    el.classList.toggle('is-up', delta.g === '▲');
+    el.classList.toggle('is-down', delta.g === '▼');
+  }
+  function kpiNote(el, text) {
+    el.textContent = text;
+    el.classList.remove('is-up', 'is-down');
+  }
+  function renderKPIs() {
+    const v = state.view, y = state.year, py = prevYear(y);
+    const cur = agg(v, y, state.race, state.sex);
+    const pre = py !== null ? agg(v, py, state.race, state.sex) : null;
+
+    $('#kpi-scope').textContent = scopeSentence();
+    $('#k-rate-label').textContent = 'Retention Rate in ' + y;
+    $('#k-ret-label').textContent = 'Students Retained in ' + y;
+    $('#k-coh-label').textContent = 'Students in ' + y + ' Cohort';
+
+    const ids = [['#k-rate', '#k-rate-d'], ['#k-ret', '#k-ret-d'], ['#k-coh', '#k-coh-d']];
+    if (!cur.ok) {
+      const msg = unavailable(cur, v);
+      ids.forEach(p => { setValue($(p[0]), msg, false); kpiNote($(p[1]), ''); });
+    } else {
+      setValue($('#k-rate'), fmtPct(cur.rate), true);
+      setValue($('#k-ret'), fmtInt(cur.N), true);
+      setValue($('#k-coh'), fmtInt(cur.D), true);
+      if (py === null) {
+        ids.forEach(p => kpiNote($(p[1]), 'No earlier year in this data'));
+      } else if (!pre.ok) {
+        ids.forEach(p => kpiNote($(p[1]), py + ': ' + unavailable(pre, v)));
+      } else {
+        kpiDelta($('#k-rate-d'), ptsDelta(cur.rate, pre.rate), ' from ' + py + ' (' + fmtPct(pre.rate) + ')');
+        kpiDelta($('#k-ret-d'), countDelta(cur.N - pre.N), ' from ' + py + ' (' + fmtInt(pre.N) + ')');
+        kpiDelta($('#k-coh-d'), countDelta(cur.D - pre.D), ' from ' + py + ' (' + fmtInt(pre.D) + ')');
+      }
+    }
+  }
+
+  /* ---------- Trend chart ---------- */
+  function drawTrend() {
+    const box = $('#trend-chart');
+    const v = state.view, hero = VIEWS[v].hero;
+    const ser = series(v, state.race, state.sex);
+    const st = stats(ser, state.year);
+    const W = Math.max(240, box.clientWidth);
+    // Height scales with width: about 380px on a wide desktop, 250px on phones
+    const H = Math.round(Math.min(380, Math.max(250, W * 0.3)));
+
+    const leg = $('#trend-legend');
+    leg.textContent = '';
+    const l1 = document.createElement('span');
+    const s1 = document.createElement('i'); s1.className = 'sw sw-line'; s1.style.borderColor = hero;
+    l1.append(s1, document.createTextNode('Retention Rate'));
+    leg.appendChild(l1);
+    if (st.n > 1) {
+      const l2 = document.createElement('span');
+      const s2 = document.createElement('i'); s2.className = 'sw sw-dash';
+      l2.append(s2, document.createTextNode('Average of ' + yearsPhrase(st.n) + ': ' + fmtPct(st.avg)));
+      leg.appendChild(l2);
+    }
+    const supp = ser.filter(d => !d.ok).map(d => d.year);
+    $('#trend-note').textContent = supp.length
+      ? 'Not plotted (' + SUPP + '): ' + supp.join(', ') + '.'
+      : '';
+
+    if (!st.n) {
+      const svg = newSvg(box, W, 120, 'No years can be displayed for this selection.');
+      svgText(svg, 0, 40, unavailable(ser[ser.length - 1], v), { class: 't-supp' });
+      return;
+    }
+
+    const m = { t: 24, r: 24, b: 28, l: 46 };
+    const pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const vals = st.ok.map(d => d.rate).concat(st.n > 1 ? [st.avg] : []);
+    let lo = Math.floor((Math.min.apply(null, vals) - 2) / 5) * 5;
+    let hi = Math.ceil((Math.max.apply(null, vals) + 1) / 5) * 5;
+    hi = Math.min(100, hi); lo = Math.max(0, lo);
+    if (hi - lo < 15) lo = Math.max(0, hi - 15);
+    const range = hi - lo;
+    const step = range > 50 ? 20 : range > 25 ? 10 : 5;
+    const x = (i) => m.l + (YEARS.length === 1 ? pw / 2 : (i * pw) / (YEARS.length - 1));
+    const y = (val) => m.t + ph - ((val - lo) / range) * ph;
+
+    const hiYear = st.ok.reduce((a, d) => (d.rate > a.rate ? d : a));
+    const loYear = st.ok.reduce((a, d) => (d.rate < a.rate ? d : a));
+    const selA = ser.find(d => d.year === state.year);
+    const label = 'Line chart of retention rate by year, ' + MINY + ' to ' + MAXY + ', for ' + VIEWS[v].name + '. ' +
+      (selA.ok ? state.year + ': ' + fmtPct(selA.rate) + '. ' : '') +
+      'Highest: ' + hiYear.year + ', ' + fmtPct(hiYear.rate) + '. Lowest: ' + loYear.year + ', ' + fmtPct(loYear.rate) +
+      '. All values are in the table below.';
+    const active = document.activeElement;
+    const refocusYear = pendingFocusYear !== null ? pendingFocusYear
+      : (active && active.classList && active.classList.contains('chart-hit') ? Number(active.getAttribute('data-year')) : null);
+    pendingFocusYear = null;
+
+    const root = newSvg(box, W, H, label + ' Use the arrow keys to move between years and Enter to select one.');
+    root.setAttribute('role', 'group');
+    const hitLayer = svgEl('g', {}, root);                                   // focusable year points (drawn first, so hover shading sits behind the line)
+    const svg = svgEl('g', { 'aria-hidden': 'true', 'pointer-events': 'none' }, root); // the visible drawing
+
+    for (let g = Math.ceil(lo / step) * step; g <= hi + 1e-9; g += step) {
+      svgEl('line', { x1: m.l, x2: W - m.r, y1: y(g), y2: y(g), stroke: C.light, 'stroke-width': 1 }, svg);
+      if (g > lo) svgText(svg, m.l - 8, y(g) + 4, g + '%', { 'text-anchor': 'end' });
+    }
+    svgEl('line', { x1: m.l, x2: W - m.r, y1: m.t + ph, y2: m.t + ph, stroke: C.mid, 'stroke-width': 1 }, svg);
+
+    const maxLabels = Math.max(2, Math.floor(pw / 40));
+    const every = Math.ceil(YEARS.length / maxLabels);
+    YEARS.forEach((yr, i) => {
+      if ((YEARS.length - 1 - i) % every !== 0) return;
+      svgText(svg, x(i), m.t + ph + 18, String(yr), {
+        'text-anchor': 'middle',
+        class: yr === state.year ? 't-name is-selected' : null
+      });
+    });
+
+    if (st.n > 1) {
+      svgEl('line', {
+        x1: m.l, x2: W - m.r, y1: y(st.avg), y2: y(st.avg),
+        stroke: C.muted, 'stroke-width': 2, 'stroke-dasharray': '6 4'
+      }, svg);
+    }
+
+    let d = '', pen = false;
+    ser.forEach((a, i) => {
+      if (!a.ok) { pen = false; return; }
+      d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(a.rate).toFixed(1);
+      pen = true;
+    });
+    svgEl('path', { d: d, fill: 'none', stroke: hero, 'stroke-width': 3, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+
+    const dots = [];
+    ser.forEach((a, i) => {
+      if (!a.ok) return;
+      const sel = a.year === state.year;
+      dots[i] = svgEl('circle', {
+        cx: x(i), cy: y(a.rate), r: sel ? 6 : 3.5, fill: hero,
+        stroke: '#FFFFFF', 'stroke-width': sel ? 2 : 1
+      }, svg);
+    });
+
+    const si = YEARS.indexOf(state.year);
+    if (selA.ok) {
+      const lx = Math.min(Math.max(x(si), m.l + 22), W - m.r - 4);
+      let topY = y(selA.rate);
+      [si - 1, si + 1].forEach(j => { if (ser[j] && ser[j].ok) topY = Math.min(topY, y(ser[j].rate)); });
+      svgText(svg, lx, Math.max(m.t - 2, topY - 12), fmtPct(selA.rate), {
+        class: 't-val halo', 'text-anchor': x(si) > W - m.r - 24 ? 'end' : 'middle'
+      });
+    }
+
+    const colW = YEARS.length > 1 ? pw / (YEARS.length - 1) : pw;
+    const hits = [];
+    const roving = (k) => hits.forEach((h, idx) => h.setAttribute('tabindex', idx === k ? '0' : '-1'));
+    ser.forEach((a, i) => {
+      const py = prevYear(a.year);
+      const pre = py !== null ? agg(v, py, state.race, state.sex) : null;
+      const lines = [a.year + ': ' + DATA.cohortTerm[String(a.year)] + ' cohort', { text: cohortSentence(a.year), cls: 'tip-cohort' }]
+        .concat(rateLines(a, v));
+      if (a.ok && pre && pre.ok) lines.push('Change from ' + py + ': ' + ptsDelta(a.rate, pre.rate).text);
+      const name = lines.map(l => (typeof l === 'string' ? l : l.text).replace(/\.$/, '')).join('. ') + '.';
+      const hit = svgEl('rect', {
+        x: x(i) - colW / 2, y: m.t, width: colW, height: ph, class: 'chart-hit',
+        role: 'button', 'aria-label': name, 'aria-pressed': a.year === state.year ? 'true' : 'false',
+        'data-year': a.year, tabindex: '-1'
+      }, hitLayer);
+      hits.push(hit);
+      const anchor = () => dots[i] || hit;
+      hit.addEventListener('mouseenter', () => { pointerOnHit = true; showTip(hit, anchor(), lines); });
+      hit.addEventListener('mouseleave', () => { pointerOnHit = false; maybeHideTip(); });
+      hit.addEventListener('focus', () => showTip(hit, anchor(), lines));
+      hit.addEventListener('blur', maybeHideTip);
+      hit.addEventListener('click', () => { pendingFocusYear = a.year; setState({ year: a.year }); });
+      hit.addEventListener('keydown', (e) => {
+        let j = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp') j = Math.min(i + 1, YEARS.length - 1);
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') j = Math.max(i - 1, 0);
+        else if (e.key === 'Home') j = 0;
+        else if (e.key === 'End') j = YEARS.length - 1;
+        else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault(); pendingFocusYear = a.year; setState({ year: a.year }); return;
+        }
+        if (j !== null) { e.preventDefault(); roving(j); hits[j].focus(); }
+      });
+    });
+    const start = refocusYear !== null && YEARS.indexOf(refocusYear) >= 0 ? YEARS.indexOf(refocusYear) : Math.max(0, YEARS.indexOf(state.year));
+    roving(start);
+    if (refocusYear !== null && hits[start]) hits[start].focus();
+  }
+
+  /* ---------- Table ---------- */
+  function renderTable() {
+    const v = state.view;
+    const ser = series(v, state.race, state.sex);
+    $('#table-caption').textContent = scopeSentence();
+    $('#table-cap').textContent = 'Retention Data Table, ' + MINY + ' to ' + MAXY + '. ' + scopeSentence();
+    const tb = $('#year-table tbody');
+    tb.textContent = '';
+    ser.slice().reverse().forEach(a => {
+      const tr = document.createElement('tr');
+      if (a.year === state.year) { tr.className = 'is-selected'; tr.setAttribute('aria-current', 'true'); }
+      const th = document.createElement('th'); th.scope = 'row'; th.textContent = String(a.year); tr.appendChild(th);
+      if (!a.ok) {
+        const td = document.createElement('td'); td.colSpan = 3; td.className = 'supp';
+        td.textContent = unavailable(a, v); tr.appendChild(td);
+      } else {
+        [fmtInt(a.D), fmtInt(a.N), fmtPct(a.rate)].forEach(t => {
+          const td = document.createElement('td'); td.textContent = t; tr.appendChild(td);
+        });
+      }
+      tb.appendChild(tr);
+    });
+  }
+
+  /* When the table is wider than its container (narrow screens, larger text spacing),
+     let keyboard users focus the container so they can scroll it with the arrow keys. */
+  function updateTableScroll() {
+    const wrap = $('#table-wrap');
+    // Only while it scrolls is it focusable, and then it needs a role and a name
+    if (wrap.scrollWidth > wrap.clientWidth + 1) {
+      wrap.setAttribute('tabindex', '0'); wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', 'Retention Data Table, scrollable');
+    } else {
+      wrap.removeAttribute('tabindex'); wrap.removeAttribute('role'); wrap.removeAttribute('aria-label');
+    }
+  }
+
+  // Arrow keys, Home and End scroll the focused table area the same way in every browser
+  $('#table-wrap').addEventListener('keydown', (e) => {
+    const wrap = e.currentTarget;
+    if (e.target !== wrap || !wrap.hasAttribute('tabindex')) return;
+    const step = 40, max = wrap.scrollWidth - wrap.clientWidth;
+    let next = null;
+    if (e.key === 'ArrowRight') next = wrap.scrollLeft + step;
+    else if (e.key === 'ArrowLeft') next = wrap.scrollLeft - step;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = max;
+    if (next === null) return;
+    e.preventDefault();
+    wrap.scrollLeft = Math.max(0, Math.min(max, next));
+  });
+
+  /* ---------- Static text ---------- */
+  function renderAbout() {
+    const dl = $('#about-list');
+    const ex = DATA.cohortTerm[String(MAXY)];
+    const items = [
+      ['Retention rate', 'The percentage of first-time, full-time, degree-seeking freshmen entering in the fall term who have enrolled in their second term (students retained divided by students in the cohort).'],
+      ['Year', 'The display year in the source data. The ' + MAXY + ' figures are for the ' + ex + ' cohort.'],
+      ['U of I System', 'The three universities combined.'],
+      ['Underrepresented Minorities', 'A combined group. In this data it equals the total of ' +
+        DATA.urmParts.slice(0, -1).join(', ') + ', and ' + DATA.urmParts[DATA.urmParts.length - 1] +
+        '. It is not added into any totals, so no student is counted twice.'],
+      [SUPP, 'Shown for any group with fewer than ' + MIN_N + ' students in a year, to protect student privacy. Averages use only years that can be displayed.']
+    ];
+    items.forEach(it => {
+      const dt = document.createElement('dt'); dt.textContent = it[0];
+      const dd = document.createElement('dd'); dd.textContent = it[1];
+      dl.append(dt, dd);
+    });
+    const f = $('#footer');
+    const ld = new Date(DATA.loadDate + 'T12:00:00');
+    const ldText = ld.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    [
+      'Latest data load: ' + ldText + '.',
+      'This dashboard shows the ' + YEARS.length + ' most recent years in the data, ' + MINY + '–' + MAXY + '.',
+      'Rates are rounded to whole percentages. Changes are the difference between the rounded rates shown.'
+    ].forEach(t => { const p = document.createElement('p'); p.textContent = t; f.appendChild(p); });
+  }
+
+  /* ---------- Render ---------- */
+  function drawCharts() { drawTrend(); }
+  function render() {
+    $('#dash').setAttribute('data-view', state.view);
+    $('#scope-line').textContent = VIEWS[state.view].name;
+    syncFilters();
+    renderKPIs();
+    drawCharts();
+    renderTable();
+    updateTableScroll();
+    postHeight();
+  }
+
+  let lastH = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    const h = Math.ceil(document.documentElement.scrollHeight);
+    if (h !== lastH) {
+      lastH = h;
+      window.parent.postMessage({ type: 'uofi-retention:height', height: h }, '*');
+    }
+  }
+
+  let lastW = 0, raf = 0;
+  function onResize() {
+    const w = document.querySelector('main').clientWidth;
+    if (w === lastW) { postHeight(); return; }
+    lastW = w;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => { hideTip(); drawCharts(); postHeight(); });
+  }
+
+  buildFilters();
+  renderAbout();
+  render();
+  lastW = document.querySelector('main').clientWidth;
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(onResize).observe(document.body);
+    const tro = new ResizeObserver(updateTableScroll);
+    tro.observe($('#year-table'));
+    tro.observe($('#table-wrap'));
+  } else {
+    window.addEventListener('resize', () => { onResize(); updateTableScroll(); });
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => { drawCharts(); postHeight(); });
+  }
+  window.addEventListener('scroll', placeTip, { passive: true });
+})();
+</script>
+</body>
+</html>
